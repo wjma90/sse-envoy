@@ -1,0 +1,51 @@
+version: "2"
+
+services:
+  edge:
+    image: envoyproxy/envoy:v1.14-latest
+    ports:
+      - "8080:8080"
+      - "8001:8001"
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml  
+      - ./certs:/certs
+
+  server-1:
+    image: wjma90/sse-server:latest
+    build: server/
+    ports:
+      - "7081:7081"
+    volumes:
+      - ./certs:/certs
+    environment:
+      - PORT=7081
+      - DATA_ENDPOINT=https://icanhazdadjoke.com/
+      - EVENT_TYPE=server1
+      - CERT_PATH=/certs/localhost.crt
+      - KEY_PATH=/certs/localhost.key
+
+  server-2:
+    image: wjma90/sse-server:latest
+    build: server/
+    ports:
+      - "6081:6081"
+    volumes:
+      - ./certs:/certs
+    environment:
+      - PORT=6081
+      - DATA_ENDPOINT=https://icanhazdadjoke.com/
+      - EVENT_TYPE=server2
+      - CERT_PATH=/certs/localhost.crt
+      - KEY_PATH=/certs/localhost.key
+
+  client: 
+    image: wjma90/sse-client:latest
+    build: client/
+    ports: 
+      - "8081:8081"
+    volumes:
+      - ./certs:/certs
+    environment:
+      - PORT=8081
+      - CERT_PATH=/certs/localhost.crt
+      - KEY_PATH=/certs/localhost.key
