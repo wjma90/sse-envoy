@@ -33,4 +33,4 @@ You can update the following environment variables in `docker-compose.yaml`
 |-----------|-------------------------------------------|
 | PORT      | Port where server listens for connections |
 | CERT_PATH | String path to where cert file lives      |
-| KEY_PATH  | String path to where key file lives       |
+| KEY_PATH  | String path to where key file lives       |`
